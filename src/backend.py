@@ -1,38 +1,31 @@
 import os
 import subprocess
-import streamlit as st
 from langchain import FewShotPromptTemplate, LLMChain
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 from langchain.prompts.example_selector import LengthBasedExampleSelector
 
+
 def save_api(OPEN_AI):
     os.environ['OPENAI_API_KEY'] = OPEN_AI
+
 
 def save_output(response, filename):
     with open(filename, "w") as f:
         f.write(response)
 
-def deno(filename=None,option=str,content=str):
-    if option == "Edit":
-        cwd = os.getcwd()
-        file_path = os.path.join(cwd, filename)
-        cmd = ["deno", "run", file_path]
-        process = subprocess.run(cmd, capture_output=True, text=True)
-        if process.returncode == 0:
-            st.code(process.stdout)
-        else:
-            st.code(f"Error running Deno:\n{process.stderr}")
-    elif option == "Write":
-        save_output(content,"temp.js")
-        cwd = os.getcwd()
-        file_path = os.path.join(cwd, "temp.js")
-        cmd = ["deno", "run", file_path]
-        process = subprocess.run(cmd, capture_output=True, text=True)
-        if process.returncode == 0:
-            st.code(process.stdout)
-        else:
-            st.code(f"Error running Deno:\n{process.stderr}")
+
+def deno(content):
+    cwd = os.getcwd()
+    temp_file_path = os.path.join(cwd, "temp.js")
+    save_output(content, temp_file_path)
+    cmd = ["deno", "run", temp_file_path]
+    process = subprocess.run(cmd, capture_output=True, text=True)
+    os.remove(temp_file_path)
+    if process.returncode == 0:
+        return process.stdout
+    else:
+        return f"Error running Deno:\n{process.stderr}"
 
 
 def read_file(filename):
@@ -72,10 +65,6 @@ def edit_prompt():
     return dynamic_prompt
 
 
-def parse_edit(output):
-    pass
-
-
 def generate_prompt():
     prompt_title = PromptTemplate(
         input_variables=['request'],
@@ -86,15 +75,14 @@ def generate_prompt():
     return prompt_title
 
 
-def connection(prompt_title,question):
+def connection(prompt_title, question):
     model = OpenAI(temperature=0, max_tokens=2500)
     if question != "":
         title_chain = LLMChain(llm=model, prompt=prompt_title)
         response = title_chain.run(request=question)
         return response
     else:
-        title_chain = LLMChain(llm=model,prompt=prompt_title)
+        title_chain = LLMChain(llm=model, prompt=prompt_title)
         response = title_chain.run(input=question)
         return response
 
-print(edit_prompt())
