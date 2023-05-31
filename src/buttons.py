@@ -1,5 +1,6 @@
 import streamlit as st
-from src.backend import generate_prompt, connection, deno, edit_prompt
+from src.prompt import generate_prompt, edit_prompt
+from src.connection import connection
 from src.codefile import file_to_code
 
 
@@ -11,11 +12,13 @@ def buttons_left():
         response = connection(prompt, content)
         return response
 
+
 def uploader():
-    file = st.file_uploader(label="", type="js")
+    file = st.file_uploader(label="", type="py")
     if file:
         code = file_to_code(file) if file is not None else ""
         return code
+
 
 def button_edit(code):
     bt = st.button("Edit", use_container_width=True)
@@ -25,14 +28,17 @@ def button_edit(code):
         return response
 
 
-def buttons_right(content):
-    bt = st.button("Run", use_container_width=True)
-    if bt:
-        return deno(content)
+def download_code(code):
+    st.download_button("Save code", code, file_name="code.py", use_container_width=True)
+
+
+def download_all():
+    st.download_button("Save code and tests")
+
 
 def radio_buttons():
     bt = st.radio("",
-                          ("Write", "Edit"),
-                          horizontal=True
-                          )
+                  ("Write", "Edit"),
+                  horizontal=True
+                  )
     return bt
