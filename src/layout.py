@@ -27,4 +27,4 @@ def layout():
                 code = st.session_state['content']
                 right_codeblock(code)
             else:
-                st.code("Enter your API KEY to start")
+                right_codeblock()
