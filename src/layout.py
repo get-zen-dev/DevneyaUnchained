@@ -1,5 +1,5 @@
 import streamlit as st
-from src.buttons import buttons_left, radio_buttons, uploader, download_code, button_edit
+from src.buttons import buttons_left, radio_buttons, uploader, button_edit
 from src.codefile import right_codeblock
 
 
@@ -15,6 +15,7 @@ def layout():
             content = uploader()
             if st.session_state['content'] is not None:
                 content = button_edit(content)
+
     if 'content' not in st.session_state:
         st.session_state['content'] = content
     elif st.session_state['content'] != content and content is not None:

@@ -21,19 +21,11 @@ def uploader():
 
 
 def button_edit(code):
-    bt = st.button("Edit", use_container_width=True)
+    bt = st.button("Edit")
     if bt:
         edit = edit_prompt()
         response = connection(edit, code)
         return response
-
-
-def download_code(code):
-    st.download_button("Save code", code, file_name="code.py", use_container_width=True)
-
-
-def download_all():
-    st.download_button("Save code and tests")
 
 
 def radio_buttons():

@@ -1,5 +1,7 @@
-streamlit
 langchain
 numpy
 pandas
 streamlit-ace
+matplotlib
+altair
+pydeck
