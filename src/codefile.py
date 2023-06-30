@@ -43,8 +43,8 @@ def right_codeblock(lib="", code=""):
     with app:
         website_name = st.text_input("Enter the name of the website:")
         try:
-            url = website_name + "/?embed=True"
-            if url:
+            if website_name.startswith("http://") or website_name.startswith("https://"):
+                url = website_name + "/?embed=True"
                 st.markdown(f'<embed src="{url}" width="100%" height="600">', unsafe_allow_html=True)
             else:
                 None
