@@ -4,7 +4,7 @@ from src.window_slide import slide
 
 
 def main():
-    st.set_page_config(page_title="Devneya Unchained", layout="wide")
+    st.set_page_config(page_title="Deploy Code", layout="wide")
     slide()
     layout()
 
