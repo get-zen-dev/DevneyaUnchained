@@ -1,55 +1,52 @@
 import streamlit as st
-from streamlit_ace import st_ace
-import numpy as np
-import pandas as pd
-from matplotlib import pyplot as plt
-import altair as alt
-from vega_datasets import data
-import pydeck as pdk
 
 
-def file_to_code(code_file):
-    if code_file:
-        code = code_file.read().decode('utf-8')
-        return code
+def create_files(repo, app_name, selected_code, text):
+    try:
+        repo.create_file(f"{app_name}.py", "Devneya", selected_code, branch="main")
+        repo.create_file("requirements.txt", "Devneya", text, branch="main")
+        st.success("Commit is successful. Visit [here](https://share.streamlit.io/deploy) for deployment.")
+    except Exception as e:
+        st.error(f"An error occurred while creating files: {str(e)}")
 
 
-def right_codeblock(code=" "):
-    history = st.session_state.get('history', [])
-    THEMES = [
-        "clouds",
-        "clouds_midnight",
-        "cobalt",
-        "xcode",
-    ]
-    KEYBINDINGS = ["emacs", "sublime", "vim", "vscode"]
+def update_files(repo, app_name, selected_code, text):
+    try:
+        branch = "main"
+        file_path_1 = f"{app_name}.py"
+        file_path_2 = "requirements.txt"
 
-    editor, app, hist = st.tabs(["Editor", "App", "History"])
+        sha_1 = repo.get_contents(file_path_1, ref=branch).sha
+        sha_2 = repo.get_contents(file_path_2, ref=branch).sha
 
-    with editor:
-        code = st_ace(value=code,
-                      placeholder="st.header('Hello world!')",
-                      theme=st.sidebar.selectbox("Theme", options=THEMES),
-                      keybinding=st.sidebar.selectbox(
-                          "Keybinding mode", options=KEYBINDINGS),
-                      show_gutter=True
-                      )
+        repo.update_file(file_path_1, "Updating file", selected_code, sha_1, branch=branch)
+        repo.update_file(file_path_2, "Updating file", text, sha_2, branch=branch)
+
+        st.success("Commit was successful.")
+    except Exception as e:
+        st.error(f"An error occurred while updating files: {str(e)}")
+
+
+def commit_deploy():
+    user = st.session_state['user']
+    selected_code = st.session_state["content"]
+    text = st.session_state['req']
+    update_files(st.session_state['repo'], "streamlit_app", selected_code, text)
+
+
+def right_codeblock(lib="", code=""):
+    prog, app = st.tabs(["Code", "App"])
+    with prog:
+        if code != "":
+            st.code(code)
+            # commit_deploy()
     with app:
+        website_name = st.text_input("Enter the name of the website:")
         try:
-            if code != " ":
-                exec(code)
-            if code not in history and code != " ":
-                history.append(code)
-                if len(history) > 5:
-                    history = history[-5:]
+            url = website_name + "/?embed=True"
+            if url:
+                st.markdown(f'<embed src="{url}" width="100%" height="600">', unsafe_allow_html=True)
+            else:
+                None
         except Exception as e:
             st.error(f"Error: {str(e)}")
-
-    with hist:
-        for idx, hist_code in enumerate(history[::-1]):
-            if hist_code != " ":
-                st.code(hist_code, language="python")
-            if hist_code != " ":
-                st.download_button("Save code", data=hist_code, file_name=f"code{idx}.py", use_container_width=True)
-
-        st.session_state['history'] = history

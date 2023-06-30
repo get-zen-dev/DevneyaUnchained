@@ -1,7 +1,5 @@
 langchain
-numpy
-pandas
-streamlit-ace
-matplotlib
-altair
-pydeck
+openai
+PyGithub
+httpx_oauth
+streamlit

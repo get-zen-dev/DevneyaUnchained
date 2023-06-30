@@ -1,6 +1,7 @@
 from langchain.llms import OpenAI
 from langchain import LLMChain
 import streamlit as st
+from github import Github
 
 
 def connection(prompt_title, question):
@@ -22,4 +23,14 @@ def connection(prompt_title, question):
         st.warning(
             "Enter your OPENAI API-KEY. Get your OpenAI API key from [here]("
             "https://platform.openai.com/account/api-keys).\n")
+        return None
+
+
+def git_connection(key):
+    try:
+        g = Github(key)
+        u = g.get_user()
+        if u.name:
+            return u
+    except Exception as e:
         return None
