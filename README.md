@@ -23,6 +23,7 @@ Here are the instructions for launching DevneyaUnchained web application locally
    $ pip install -r requirements.txt
 ```
  
+
 2. Locally launch the streamlit localhost by using the following command:
  
  ``` python
@@ -32,12 +33,7 @@ Here are the instructions for launching DevneyaUnchained web application locally
 ## Usage
 **DevneyaUnchained** can be used to create any type of Streamlit app. For instance, Dashboard for data analysis with a wide variety data visualisation. Usecases can be found on Streamlit website.
 
-
-
-## Linking your Oauth app
-Devenya uses GitHub OAuth app for authentication process. Therefore, if the app is run locally, the **CLIENT-ID** and **CLIENT-SECRET** should be should be included in environment.
-
-##Configuration
+## Configuration
 **DevneyaUnchained** uses GitHub OAuth app for the authentication process. If the app is run locally, you need to include the **CLIENT_ID** and **CLIENT_SECRET** in the environment.
 
 ## Project Structure
