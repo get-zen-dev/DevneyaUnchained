@@ -21,7 +21,7 @@ async def get_access_token(client: GitHubOAuth2, redirect_uri: str, code: str):
 def get_login_str():
     client: GitHubOAuth2 = GitHubOAuth2(client_id, client_secret)
     authorization_url = asyncio.run(get_authorization_url(client, redirect_uri))
-    button_html = f'<a href="{authorization_url}" target="_self"><button>Authorise</button></a>'
+    button_html = f'<a target="_self" href="{authorization_url}"><button>Authorise</button></a>'
 
     return button_html
 
